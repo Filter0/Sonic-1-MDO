@@ -3,13 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 Electro:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Elec_Index(pc,d0.w),d1
-		jmp	Elec_Index(pc,d1.w)
-; ===========================================================================
-Elec_Index:	dc.w Elec_Main-Elec_Index
-		dc.w Elec_Shock-Elec_Index
+		tst.b	obRoutine(a0)
+		bne.s   Elec_Shock
 
 elec_freq:	equ $34		; frequency
 ; ===========================================================================
@@ -38,7 +33,7 @@ Elec_Shock:	; Routine 2
 		jsr	(PlaySound_Special).l	; play electricity sound
 
 	@animate:
-		lea	(Ani_Elec).l,a1
+		lea	Ani_Elec(pc),a1
 		jsr	(AnimateSprite).l
 		move.b	#0,obColType(a0)
 		cmpi.b	#4,obFrame(a0)	; is 4th frame displayed?

@@ -63,33 +63,31 @@ See_Main:	; Routine 0
 See_Slope:	; Routine 2
 		move.b	see_frame(a0),d1
 		bsr.w	See_ChgFrame
-		lea	(See_DataSlope).l,a2
+		lea	See_DataSlope(pc),a2
 		btst	#0,obFrame(a0)	; is seesaw flat?
 		beq.s	@notflat	; if not, branch
-		lea	(See_DataFlat).l,a2
+		lea	See_DataFlat(pc),a2
 
 	@notflat:
 		lea	(v_player).w,a1
 		move.w	obVelY(a1),see_speed(a0)
 		move.w	#$30,d1
-		jsr	(SlopeObject).l
-		rts	
+		jmp	(SlopeObject).l
 ; ===========================================================================
 
 See_Slope2:	; Routine 4
-		bsr.w	See_ChkSide
-		lea	(See_DataSlope).l,a2
+		bsr.s	See_ChkSide
+		lea	See_DataSlope(pc),a2
 		btst	#0,obFrame(a0)	; is seesaw flat?
 		beq.s	@notflat	; if not, branch
-		lea	(See_DataFlat).l,a2
+		lea	See_DataFlat(pc),a2
 
 	@notflat:
 		move.w	#$30,d1
 		jsr	(ExitPlatform).l
 		move.w	#$30,d1
 		move.w	obX(a0),d2
-		jsr	(SlopeObject2).l
-		rts	
+		jmp	(SlopeObject2).l
 ; ===========================================================================
 
 See_ChkSide:
@@ -123,7 +121,7 @@ See_ChgFrame:
 		bset	#0,obRender(a0)
 
 	@noflip:
-		rts	
+		rts
 ; ===========================================================================
 
 See_Spikeball:	; Routine 6
@@ -178,7 +176,7 @@ loc_11838:
 ; ===========================================================================
 
 loc_1183E:
-		lea	(See_Speeds).l,a2
+		lea	See_Speeds(pc),a2
 		moveq	#0,d0
 		move.b	obFrame(a1),d0
 		move.w	#$28,d2
@@ -197,7 +195,7 @@ loc_1185C:
 		move.w	d2,obX(a0)
 		clr.w	obY+2(a0)
 		clr.w	obX+2(a0)
-		rts	
+		rts
 ; ===========================================================================
 
 See_SpikeFall:	; Routine $A
@@ -208,16 +206,16 @@ See_SpikeFall:	; Routine $A
 		subi.w	#$2F,d0
 		cmp.w	obY(a0),d0
 		bgt.s	locret_11898
-		bsr.w	ObjectFall
+		bra.w	ObjectFall
 
 locret_11898:
-		rts	
+		rts
 ; ===========================================================================
 
 loc_1189A:
 		bsr.w	ObjectFall
 		movea.l	see_parent(a0),a1
-		lea	(See_Speeds).l,a2
+		lea	See_Speeds(pc),a2
 		moveq	#0,d0
 		move.b	obFrame(a1),d0
 		move.w	obX(a0),d1
@@ -263,7 +261,7 @@ loc_1192C:
 		subq.b	#2,obRoutine(a0)
 
 locret_11938:
-		rts	
+		rts
 ; ===========================================================================
 See_Speeds:	dc.w -8, -$1C, -$2F, -$1C, -8
 

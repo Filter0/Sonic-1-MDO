@@ -198,7 +198,7 @@ UpdateMusic:
 		adda.w	#TrackSz,a5
 		tst.b	(a5)			; Is track playing (TrackPlaybackControl)
 		bpl.s	DoStartZ80		; Branch if not
-		jmp	PSGUpdateTrack(pc)
+		jsr	PSGUpdateTrack(pc)
 ; loc_71C44:
 DoStartZ80:
 		btst    #6,(v_megadrive).w ; is system a 50hz device?
@@ -533,7 +533,8 @@ PauseMusic:
 		jsr	WriteFMI(pc)
 		dbf	d3,@noteoffloop
 
-		jmp	PSGSilenceAll(pc)
+		jsr	PSGSilenceAll(pc)
+		bra.w   DoStartZ80
 ; ===========================================================================
 ; loc_71E94:
 @unpausemusic:
